@@ -36,7 +36,7 @@ async function fillValue(page, selector, value) {
       visiblex = true;
     }
  }
- process.stdout.write(process.argv[6]);
+ //process.stdout.write(process.argv[6]);
  //process.stdout.write(visiblex);
  const browser = await puppeteer.launch({
    headless: false,
