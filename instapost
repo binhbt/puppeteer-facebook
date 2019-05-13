@@ -87,9 +87,28 @@ process.stdout.write('bbbbbbbbbbbbbbbb');
    }
    await page.waitFor(1000);
    //click to upload icon
-   const [button] = await page.$x("//button[contains(., 'Cancel')]");
-   if (button) {
-     await button.click();
+   const [button1] = await page.$x("//button[contains(., 'Cancel')]");
+   if (button1) {
+     await button1.click();
+   }
+   await page.waitFor(3000);
+   //click allow connect to facebook
+   await page.click('div[role="menuitem"]');
+   await page.waitFor(3000);
+   const input = await page.$('input[type="file"]')
+   await input.uploadFile('/home/leo/Desktop/101723142-vector-funny-cartoon-red-friendly-robot-character-isolated-on-white-background-kids-3d-robot-toy-cha.jpg');
+   await page.waitFor(1000);
+   const [nextBtn] = await page.$x("//button[contains(., 'Next')]");
+   if (nextBtn) {
+     await nextBtn.click();
+   }
+   await page.waitFor(1000);
+   await page.click('textarea[aria-label="Write a caption…"]');
+   await page.keyboard.type(message);
+   await page.waitFor(1000);
+   const [shareBtn] = await page.$x("//button[contains(., 'Share')]");
+   if (shareBtn) {
+     await shareBtn.click();
    }
    await page.waitFor(1000000);
    //Post to facebook
