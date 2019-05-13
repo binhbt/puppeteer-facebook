@@ -110,10 +110,6 @@ process.stdout.write('bbbbbbbbbbbbbbbb');
    if (shareBtn) {
      await shareBtn.click();
    }
-   await page.waitFor(1000000);
-   //Post to facebook
-   //process.stdout.write(html);
-   await page.click('[data-testid="react-composer-post-button"]');
    // can’t find reliable way to detect that it posted successfully,
    // but if we close too soon it won’t finish the post request
    await new Promise(res => setTimeout(res, 2000));
