@@ -41,7 +41,7 @@ async function fillValue(page, selector, value) {
  //process.stdout.write(process.argv[6]);
  //process.stdout.write(visiblex);
  const browser = await puppeteer.launch({
-   headless: false,
+   headless: !visiblex,
    //userDataDir: "data"
    slowMo: 250, args: ["--disable-notifications"]
  });
