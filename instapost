@@ -1,0 +1,103 @@
+#!/usr/bin/env node
+// Usage:
+// SHow the browser
+// $ ./instapost 426433944823847 "Xin chao" email pass visible
+//
+// Run on background
+// $ ./instapost 426433944823847 "Xin chao" email pass
+//
+async function clear(page, selector) {
+  await page.evaluate(selector => {
+    document.querySelector(selector).value = "";
+  }, selector);
+}
+async function fillValue(page, selector, value) {
+  await page.evaluate(selector => {
+    document.querySelector(selector).value = value;
+  }, selector);
+}
+(async() => {
+ const puppeteer = require('puppeteer');
+ const devices = require('puppeteer/DeviceDescriptors');
+ const iPhone = devices['iPhone 8'];
+
+ console.log(process.argv);
+ var url = 'https://www.facebook.com/';
+ var visiblex = false;
+ var message = '';
+ var email ='';
+ var pass ='';
+ if (process.argv.length >=6) {
+    url +=process.argv[2];
+    message = process.argv[3];
+    email=process.argv[4];
+    pass=process.argv[5];
+ }
+ if (process.argv.length == 7) {
+    if(process.argv[6] == 'visible'){
+      visiblex = true;
+    }
+ }
+ //process.stdout.write(process.argv[6]);
+ //process.stdout.write(visiblex);
+ const browser = await puppeteer.launch({
+   headless: false,
+   //userDataDir: "data"
+   slowMo: 250, args: ["--disable-notifications"]
+ });
+ const page = (await browser.pages())[0];
+ await page.emulate(iPhone);
+   // Viewport && Window size
+   //const width = 400
+   //const height = 600
+   //await page.setUserAgent('Mozilla (Android) Mobile')
+   //await page.setViewport({ width, height })
+
+ await page.goto('https://www.instagram.com');
+ await page.waitFor(3000);
+process.stdout.write('aaaaaaaaaaaaaa');
+   // wait for homepage to load after a manual login
+   await page.click('button[type="button"]');
+process.stdout.write('bbbbbbbbbbbbbbbb');
+   await page.waitFor(3000);
+   //click login by facebook
+   await page.click('button[type="button"]');
+   await page.waitFor(3000);
+   //wait for homepage to load after a manual login
+   await clear(page,'input[name="email"]');
+   await page.click('input[name="email"]');
+   await page.keyboard.type(email);
+
+   await clear(page,'input[name="pass"]');
+   await page.click('input[name="pass"]');
+   await page.keyboard.type(pass);
+
+   await page.keyboard.press('Enter'); // Enter Key
+   await page.waitFor(3000);
+   //click allow connect to facebook
+   await page.click('button[type="submit"]');
+   await page.waitFor(3000);
+   //click save login info
+   await page.click('button');
+   await page.waitFor(3000);
+   //click to shortcut to home
+   const [button] = await page.$x("//button[contains(., 'Cancel')]");
+   if (button) {
+     await button.click();
+   }
+   await page.waitFor(1000);
+   //click to upload icon
+   const [button] = await page.$x("//button[contains(., 'Cancel')]");
+   if (button) {
+     await button.click();
+   }
+   await page.waitFor(1000000);
+   //Post to facebook
+   //process.stdout.write(html);
+   await page.click('[data-testid="react-composer-post-button"]');
+   // can’t find reliable way to detect that it posted successfully,
+   // but if we close too soon it won’t finish the post request
+   await new Promise(res => setTimeout(res, 2000));
+ 
+ await browser.close();
+})();
