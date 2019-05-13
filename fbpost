@@ -39,12 +39,13 @@ async function fillValue(page, selector, value) {
  //process.stdout.write(process.argv[6]);
  //process.stdout.write(visiblex);
  const browser = await puppeteer.launch({
-   headless: false,
+   headless: !visiblex,
    //userDataDir: "data"
    slowMo: 250, args: ["--disable-notifications"]
  });
  const page = (await browser.pages())[0];
  await page.goto('https://www.facebook.com');
+ await page.waitFor(3000);
    // wait for homepage to load after a manual login
    await clear(page,'#email');
    await page.click('#email');
